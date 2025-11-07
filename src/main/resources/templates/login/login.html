@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+
+    <!-- Roboto Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- ✅ External CSS -->
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+
+<body>
+<div class="login-container">
+    <img
+            src="/images/login/hymh-logo.png"
+            alt="Hymh Logo"
+            class="hymh-logo"
+            th:src="@{/images/login/hymh-logo.png}"
+    />
+    <h2>Login</h2>
+
+    <form th:action="@{/login}" method="post">
+        <div class="form-group">
+            <label for="userid">UserId</label>
+            <input type="text" id="userid" name="userid" required />
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required />
+        </div>
+
+        <button class="btn-submit" type="submit">Sign In</button>
+    </form>
+
+    <p th:if="${error != null}" class="error" th:text="${error}"></p>
+    <p th:if="${regprocok != null}" class="regprocok" th:text="${regprocok}"></p>
+    <p th:if="${regprocfail != null}" class="regprocfail" th:text="${regprocfail}"></p>
+
+    <p class="flex-bottom">
+        <a class="register-link" href="/register">회원가입</a>
+    </p>
+</div>
+</body>
+</html>

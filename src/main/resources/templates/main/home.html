@@ -242,7 +242,7 @@
                 <h1>대시보드</h1>
                 <div class="user-info">
                     <img src="https://via.placeholder.com/40" alt="User">
-                    <span>안녕하세요, 관리자님!</span>
+                    <span th:text="'Hello ' + ${name} + ' 님!'"></span> <a href="/login" class="btn secondary">로그아웃</a>
                 </div>
             </div>
 

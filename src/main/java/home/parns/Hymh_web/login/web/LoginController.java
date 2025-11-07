@@ -1,31 +1,70 @@
 package home.parns.Hymh_web.login.web;
 
+
+import home.parns.Hymh_web.login.vo.HymhUserVo;
+import home.parns.Hymh_web.login.service.LoginService;
+import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
+@RequiredArgsConstructor
 public class LoginController {
 
-    @GetMapping("/login")
+    Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    private final LoginService loginService;
+
+    @GetMapping({"/", "/login"})
     public String login() {
-        return "login";   // templates/login.html
+        return "login/login";   // templates/login.html
     }
 
     @PostMapping("/login")
-    public String loginPost(String username, String password) {
+    public String loginProcess(@RequestParam String userid,
+                               @RequestParam String password,
+                               Model model) {
 
-        // ✅ 임시 예시: admin / 1234 일 때 로그인 성공
-        if ("admin".equals(username) && "1234".equals(password)) {
-            return "redirect:/home";
+        logger.info(userid);
+        logger.info(password);
+        HymhUserVo user = loginService.login(userid, password);
+        if (user == null) {
+            model.addAttribute("error", "아이디 또는 비밀번호가 틀렸습니다.");
+            return "login/login";
         }
-
-        // 실패 → 다시 로그인 화면 + error 표시
-        return "redirect:/login?error";
+        model.addAttribute("name", user.getYname());
+        return "main/home";
     }
 
     @GetMapping("/home")
     public String home() {
         return "home";   // 로그인 성공 시 이동할 화면
+    }
+
+    @GetMapping("/register")
+    public String registerPage() {
+        return "login/register";
+    }
+
+    @PostMapping("/register")
+    public String registerProcess(@RequestParam String yid,
+                                  @RequestParam String password,
+                                  @RequestParam String yname,
+                                  @RequestParam(required = false) String ytel,
+                                  Model model) {
+        int regIdCnt = loginService.register(yid, password, yname, ytel);
+
+        if(regIdCnt == 1){
+            model.addAttribute("regprocok", "가입이 완료되었습니다.");
+        }else{
+            model.addAttribute("regprocfail", "가입이 실패 하였습니다.");
+        }
+
+        return "login/login";
     }
 }
