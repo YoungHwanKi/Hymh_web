@@ -3,6 +3,7 @@ package home.parns.Hymh_web.login.web;
 
 import home.parns.Hymh_web.login.vo.HymhUserVo;
 import home.parns.Hymh_web.login.service.LoginService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +29,7 @@ public class LoginController {
     @PostMapping("/login")
     public String loginProcess(@RequestParam String userid,
                                @RequestParam String password,
+                               HttpSession session,
                                Model model) {
 
         logger.info(userid);
@@ -38,6 +40,8 @@ public class LoginController {
             return "login/login";
         }
         model.addAttribute("name", user.getYname());
+
+        session.setAttribute("user", user);
         return "main/home";
     }
 
@@ -66,5 +70,17 @@ public class LoginController {
         }
 
         return "login/login";
+    }
+
+    @GetMapping("/main")
+    public String main(Model model) {
+        model.addAttribute("title", "Home");
+        model.addAttribute("content", "main/home :: content");
+        return "main/main";   // ❗️ 반환은 layout 파일 이름
+    }
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/login";
     }
 }

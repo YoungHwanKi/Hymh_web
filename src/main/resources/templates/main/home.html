@@ -1,366 +1,58 @@
-<file file_path=/src/main/resources/templates/home.html>
-    <!DOCTYPE html>
-    <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8" />
-        <title>Dashboard</title>
-        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-        <style>
-            body {
-                font-family: 'Roboto', sans-serif;
-                margin: 0;
-                padding: 0;
-                background-color: #f4f6f8;
-            }
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title th:text="${title} ?: 'Home'">Home</title>
 
-            .dashboard-container {
-                display: flex;
-                min-height: 100vh;
-            }
+    <link th:href="@{/css/mainFrame.css}" rel="stylesheet">
+</head>
 
-            /* Sidebar */
-            .sidebar {
-                width: 240px;
-                background-color: #2c3e50;
-                color: white;
-                padding: 20px;
-                box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-            }
+<body>
 
-            .sidebar h2 {
-                margin-top: 0;
-                font-size: 1.5em;
-                margin-bottom: 30px;
-            }
+<!-- ✅ TOP 영역 -->
+<header class="topbar">
+    <!-- 모바일 메뉴 버튼 -->
+    <button class="menu-btn" onclick="toggleSidebar()">☰</button>
 
-            .sidebar nav a {
-                display: block;
-                color: white;
-                text-decoration: none;
-                padding: 10px 15px;
-                margin: 8px 0;
-                border-radius: 4px;
-                transition: background 0.3s;
-            }
-
-            .sidebar nav a:hover {
-                background-color: #34495e;
-            }
-
-            /* Main Content */
-            .main-content {
-                flex: 1;
-                padding: 30px;
-            }
-
-            .header {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-bottom: 30px;
-            }
-
-            .header h1 {
-                margin: 0;
-                font-size: 2em;
-            }
-
-            .user-info {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-            }
-
-            .user-info img {
-                width: 40px;
-                height: 40px;
-                border-radius: 50%;
-            }
-
-            /* Stats Cards */
-            .stats-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-                gap: 20px;
-                margin-bottom: 30px;
-            }
-
-            .stat-card {
-                background: white;
-                padding: 20px;
-                border-radius: 8px;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-                transition: transform 0.2s;
-            }
-
-            .stat-card:hover {
-                transform: translateY(-5px);
-            }
-
-            .stat-card h3 {
-                margin: 0 0 10px;
-                font-size: 1.2em;
-                color: #555;
-            }
-
-            .stat-card .value {
-                font-size: 2em;
-                font-weight: 700;
-                color: #2c3e50;
-            }
-
-            /* Calendar Section */
-            .calendar-section {
-                background: white;
-                padding: 20px;
-                border-radius: 8px;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-                margin-bottom: 30px;
-            }
-
-            .calendar-section h2 {
-                margin-top: 0;
-                margin-bottom: 15px;
-                color: #2c3e50;
-            }
-
-            .calendar {
-                width: 100%;
-                border-collapse: collapse;
-                font-size: 14px;
-            }
-
-            .calendar thead th {
-                background-color: #e9ecef;
-                padding: 10px;
-                text-align: center;
-                font-weight: bold;
-            }
-
-            .calendar tbody td {
-                padding: 10px;
-                text-align: center;
-                border: 1px solid #ddd;
-                cursor: pointer;
-                transition: background 0.3s;
-            }
-
-            .calendar tbody td:hover {
-                background-color: #f8f9fa;
-            }
-
-            .calendar tbody td.event {
-                background-color: #ffe5e5;
-                border-radius: 50%;
-                color: #d63384;
-                font-weight: bold;
-            }
-
-            .calendar tbody td.today {
-                background-color: #e6f7ff;
-                border-radius: 50%;
-                color: #1890ff;
-                font-weight: bold;
-            }
-
-            /* Recent Activity */
-            .activity-section {
-                background: white;
-                padding: 20px;
-                border-radius: 8px;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            }
-
-            .activity-section h2 {
-                margin-top: 0;
-                margin-bottom: 15px;
-                color: #2c3e50;
-            }
-
-            .activity-list {
-                list-style: none;
-                padding: 0;
-                margin: 0;
-            }
-
-            .activity-item {
-                display: flex;
-                align-items: center;
-                gap: 12px;
-                padding: 10px 0;
-                border-bottom: 1px solid #eee;
-            }
-
-            .activity-item:last-child {
-                border-bottom: none;
-            }
-
-            .activity-icon {
-                width: 30px;
-                height: 30px;
-                background: #3498db;
-                color: white;
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 16px;
-            }
-
-            @media (max-width: 768px) {
-                .dashboard-container {
-                    flex-direction: column;
-                }
-
-                .sidebar {
-                    width: 100%;
-                    padding: 15px;
-                }
-
-                .main-content {
-                    padding: 20px;
-                }
-            }
-        </style>
-    </head>
-    <body>
-    <div class="dashboard-container">
-        <!-- Sidebar -->
-        <div class="sidebar">
-            <h2>Hymh</h2>
-            <nav>
-                <a href="#">대시보드</a>
-                <a href="#">회원 관리</a>
-                <a href="#">설정</a>
-                <a href="#">로그아웃</a>
-            </nav>
-        </div>
-
-        <!-- Main Content -->
-        <div class="main-content">
-            <div class="header">
-                <h1>대시보드</h1>
-                <div class="user-info">
-                    <img src="https://via.placeholder.com/40" alt="User">
-                    <span th:text="'Hello ' + ${name} + ' 님!'"></span> <a href="/login" class="btn secondary">로그아웃</a>
-                </div>
-            </div>
-
-            <!-- Stats Cards -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h3>총 사용자</h3>
-                    <div class="value">1,234</div>
-                </div>
-                <div class="stat-card">
-                    <h3>월 매출</h3>
-                    <div class="value">₩ 12,345,678</div>
-                </div>
-                <div class="stat-card">
-                    <h3>신규 가입</h3>
-                    <div class="value">+45</div>
-                </div>
-            </div>
-
-            <!-- Calendar Section -->
-            <div class="calendar-section">
-                <h2>월간 일정</h2>
-                <table class="calendar">
-                    <thead>
-                    <tr>
-                        <th>일</th>
-                        <th>월</th>
-                        <th>화</th>
-                        <th>수</th>
-                        <th>목</th>
-                        <th>금</th>
-                        <th>토</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <!-- 더미 데이터: 2024년 4월 달력 -->
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td></td>
-                        <td>1</td>
-                        <td>2</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>4</td>
-                        <td>5</td>
-                        <td>6</td>
-                        <td>7</td>
-                        <td>8</td>
-                        <td>9</td>
-                    </tr>
-                    <tr>
-                        <td>10</td>
-                        <td>11</td>
-                        <td>12</td>
-                        <td>13</td>
-                        <td>14</td>
-                        <td>15</td>
-                        <td>16</td>
-                    </tr>
-                    <tr>
-                        <td>17</td>
-                        <td>18</td>
-                        <td>19</td>
-                        <td>20</td>
-                        <td>21</td>
-                        <td>22</td>
-                        <td>23</td>
-                    </tr>
-                    <tr>
-                        <td>24</td>
-                        <td>25</td>
-                        <td>26</td>
-                        <td>27</td>
-                        <td>28</td>
-                        <td>29</td>
-                        <td>30</td>
-                    </tr>
-                    </tbody>
-                </table>
-                <!-- 이벤트 날짜 예시 -->
-                <div class="event-notes">
-                    <p><strong>이벤트:</strong> 5일(화) - 월간 회의, 15일(금) - 신제품 출시</p>
-                </div>
-            </div>
-
-            <!-- Recent Activity -->
-            <div class="activity-section">
-                <h2>최근 활동</h2>
-                <ul class="activity-list">
-                    <li class="activity-item">
-                        <div class="activity-icon">📝</div>
-                        <div>
-                            <strong>관리자</strong>가 새로운 사용자를 등록했습니다.
-                            <div class="time">5분 전</div>
-                        </div>
-                    </li>
-                    <li class="activity-item">
-                        <div class="activity-icon">💰</div>
-                        <div>
-                            <strong>시스템</strong>에서 결제가 완료되었습니다.
-                            <div class="time">12분 전</div>
-                        </div>
-                    </li>
-                    <li class="activity-item">
-                        <div class="activity-icon">⚙️</div>
-                        <div>
-                            <strong>관리자</strong>가 설정을 업데이트했습니다.
-                            <div class="time">30분 전</div>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
+    <div class="logo">
+        <img th:src="@{/images/logo.png}" alt="Logo"/>
+        <span>Hymh Web</span>
     </div>
-    </body>
-    </html>
-</file>
+
+    <div class="user-info" th:if="${session.user != null}">
+        <span th:text="${session.user.getYname() + ' 님'}"></span>
+        <a href="/logout" class="logout-btn">Logout</a>
+    </div>
+</header>
+
+
+<!-- ✅ 본문 전체 -->
+<div class="container">
+
+    <!-- ✅ LEFT Sidebar -->
+    <nav id="sidebar" class="sidebar">
+        <ul>
+            <li><a href="/main">Home</a></li>
+            <li><a href="/user">User 관리</a></li>
+            <li><a href="/log">로그 조회</a></li>
+            <li><a href="/board">게시판</a></li>
+        </ul>
+    </nav>
+
+    <!-- ✅ 오른쪽 컨텐츠 -->
+    <main class="content">
+        <div th:replace="${content}"></div>
+    </main>
+
+</div>
+
+
+<script>
+    function toggleSidebar() {
+        document.getElementById("sidebar").classList.toggle("open");
+    }
+</script>
+
+</body>
+</html>
