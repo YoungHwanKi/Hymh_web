@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="home.parns.Hymh_web.memo.mapper.MemoMapper">
+
+    <select id="getMemoList" resultType="home.parns.Hymh_web.memo.vo.MemoVo">
+        SELECT
+            seq,
+            title,
+            memo,
+            memo_type     AS memoType,
+            use_cl        AS useCl,
+            public_level  AS publicLevel,
+            use_type           AS useType,
+            depth,
+            super_seq     AS superSeq,
+            yid,
+            DATE_FORMAT(regdt, '%Y-%m-%d %H:%i') AS regdt,
+            DATE_FORMAT(upddt, '%Y-%m-%d %H:%i') AS upddt
+        FROM tb_memo
+        WHERE use_cl = 'Y'
+        ORDER BY seq DESC
+    </select>
+
+</mapper>

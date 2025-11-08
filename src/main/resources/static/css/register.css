@@ -1,0 +1,95 @@
+/* 전체 화면 */
+body {
+    font-family: "Pretendard", "Noto Sans KR", sans-serif;
+    background: #eef3ff;
+    margin: 0;
+    padding: 0;
+}
+
+/* 중앙 박스 */
+.auth-container {
+    width: 380px;
+    margin: 90px auto;
+    padding: 30px 28px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+    text-align: center;
+}
+
+/* 제목 */
+.auth-title {
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: 600;
+    color: #354569;
+}
+
+/* form */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+/* 입력 그룹 */
+.input-group {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.input-group label {
+    font-size: 14px;
+    color: #324567;
+}
+
+.input-group input {
+    padding: 10px;
+    font-size: 15px;
+    border-radius: 6px;
+    border: 1px solid #c6cce2;
+    transition: 0.2s;
+}
+
+.input-group input:focus {
+    border-color: #5271FF;
+    outline: none;
+    box-shadow: 0 0 4px rgba(82,113,255,0.3);
+}
+
+/* 버튼 */
+.auth-btn {
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: 0.2s;
+}
+
+.auth-btn.primary {
+    background: #5271FF;
+    color: white;
+}
+
+.auth-btn.primary:hover {
+    background: #435dcc;
+}
+
+/* 하단 링크 */
+.auth-bottom {
+    margin-top: 18px;
+    font-size: 14px;
+}
+
+.auth-bottom a {
+    color: #5271FF;
+    text-decoration: none;
+}
+
+.auth-bottom a:hover {
+    text-decoration: underline;
+}

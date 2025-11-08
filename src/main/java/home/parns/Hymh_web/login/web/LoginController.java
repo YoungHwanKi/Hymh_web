@@ -32,17 +32,21 @@ public class LoginController {
                                HttpSession session,
                                Model model) {
 
-        logger.info(userid);
-        logger.info(password);
+
         HymhUserVo user = loginService.login(userid, password);
         if (user == null) {
             model.addAttribute("error", "아이디 또는 비밀번호가 틀렸습니다.");
             return "login/login";
-        }
-        model.addAttribute("name", user.getYname());
+        }else {
+            session.setAttribute("user", user);
 
-        session.setAttribute("user", user);
-        return "main/home";
+            model.addAttribute("name", user.getYname());
+
+            model.addAttribute("tpl", "main/main");   // 템플릿 경로만
+            model.addAttribute("frag", "content");    // 프래그먼트 이름만
+
+            return "main/home";
+        }
     }
 
     @GetMapping("/home")
@@ -73,11 +77,13 @@ public class LoginController {
     }
 
     @GetMapping("/main")
-    public String main(Model model) {
-        model.addAttribute("title", "Home");
-        model.addAttribute("content", "main/home :: content");
-        return "main/main";   // ❗️ 반환은 layout 파일 이름
+    public String home(Model model) {
+        model.addAttribute("tpl", "main/main");   // 템플릿 경로만
+        model.addAttribute("frag", "content");    // 프래그먼트 이름만
+
+        return "main/home";
     }
+
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="content">
+
+    <h2 class="memo-title">📒 메모 리스트</h2>
+
+    <div class="memo-btn-area">
+        <a href="/memo/new" class="memo-btn">+ 새 메모</a>
+    </div>
+
+    <table class="memo-table">
+        <thead>
+        <tr>
+            <th>No</th>
+            <th>제목</th>
+            <th>작성자</th>
+            <th>등록일</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each="memo : ${memoList}">
+            <td th:text="${memo.seq}"></td>
+            <td class="title">
+                <a th:href="@{/memo/{seq}(seq=${memo.seq})}"
+                   th:text="${memo.title}">
+                </a>
+            </td>
+            <td th:text="${memo.yid}"></td>
+            <td th:text="${memo.regdt}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+
+</body>
+</html>

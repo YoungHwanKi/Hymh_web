@@ -6,6 +6,7 @@
     <title th:text="${title} ?: 'Home'">Home</title>
 
     <link th:href="@{/css/mainFrame.css}" rel="stylesheet">
+    <link th:href="@{/css/memo.css}" rel="stylesheet"/>
 </head>
 
 <body>
@@ -33,17 +34,25 @@
     <!-- ✅ LEFT Sidebar -->
     <nav id="sidebar" class="sidebar">
         <ul>
-            <li><a href="/main">Home</a></li>
-            <li><a href="/user">User 관리</a></li>
+            <li><a href="/main">Main</a></li>
+            <li><a href="/memo">기록장</a></li>
             <li><a href="/log">로그 조회</a></li>
             <li><a href="/board">게시판</a></li>
         </ul>
     </nav>
 
-    <!-- ✅ 오른쪽 컨텐츠 -->
     <main class="content">
-        <div th:replace="${content}"></div>
+        <div th:replace="~{${tpl} :: ${frag}}"></div>
     </main>
+    <!-- ✅ 오른쪽 컨텐츠 -->
+<!--    <main class="content">-->
+<!--        <div th:replace="~{${#strings.trim(content)}}"></div>-->
+<!--         &lt;!&ndash;p>==[[${content}]]==</p&ndash;&gt;-->
+<!--        &lt;!&ndash;div th:replace="~{${content}}"></div&ndash;&gt;-->
+<!--        &lt;!&ndash;div th:replace="~{main/main :: content}"></div&ndash;&gt;-->
+<!--        &lt;!&ndash;div th:replace="~{${content}}">${content}</div&ndash;&gt;-->
+<!--    </main>-->
+
 
 </div>
 

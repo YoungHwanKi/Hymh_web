@@ -5,6 +5,13 @@ spring:
     password: "!Dnfl578657"
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    cache: false
+
+
 mybatis:
   mapper-locations: classpath:mapper/**/*.xml
   type-aliases-package: com.example.demo.model
