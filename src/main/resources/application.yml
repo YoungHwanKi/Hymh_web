@@ -1,6 +1,21 @@
 spring:
-  application:
-    name: Hymh_web
+  datasource:
+    url: jdbc:mysql://bobchadoo.ddns.net:8312/ydb?useSSL=false&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+    username: "gpals"
+    password: "!Dnfl578657"
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    cache: false
+
+
+mybatis:
+  mapper-locations: classpath:mapper/**/*.xml
+  type-aliases-package: com.example.demo.model
 
 server:
-  port: 8311  # 웹 브라우저에서 http://localhost 로도 접근 가능 아니얔ㅋㅋ
+  port: 8102  # 웹 브라우저에서 http://localhost 로도 접근 가능 아니얔ㅋㅋ
+

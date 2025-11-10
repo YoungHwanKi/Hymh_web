@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="home.parns.Hymh_web.login.mapper.HymhUserMapper">
+
+    <resultMap id="TbYuserMap" type="home.parns.Hymh_web.login.vo.HymhUserVo">
+        <id     property="yid"         column="yid"/>
+        <result property="ypassword"   column="ypassword"/>
+        <result property="yprepassword" column="yprepassword"/>
+        <result property="ypasschgdt"  column="ypasschgdt"/>
+        <result property="failcnt"     column="failcnt"/>
+        <result property="yname"       column="yname"/>
+        <result property="ytel"        column="ytel"/>
+        <result property="yadress"     column="yadress"/>
+        <result property="status"      column="status"/>
+        <result property="yfiller1"    column="yfiller1"/>
+        <result property="yfiller2"    column="yfiller2"/>
+        <result property="yfiller3"    column="yfiller3"/>
+        <result property="regdt"       column="regdt"/>
+        <result property="upddt"       column="upddt"/>
+        <result property="regid"       column="regid"/>
+        <result property="updid"       column="updid"/>
+        <result property="lastLogindt" column="last_logindt"/>
+    </resultMap>
+
+    <select id="findById" resultMap="TbYuserMap">
+        SELECT *
+        FROM tb_yuser
+        WHERE yid = #{yid}
+    </select>
+
+    <update id="updateLoginInfo" parameterType="home.parns.Hymh_web.login.vo.HymhUserVo">
+        UPDATE tb_yuser
+        SET
+            failcnt = #{failcnt},
+            last_logindt = #{lastLogindt}
+        WHERE yid = #{yid}
+    </update>
+
+    <insert id="insertUser" parameterType="home.parns.Hymh_web.login.vo.HymhUserVo">
+        INSERT INTO tb_yuser (
+            yid, ypassword, yprepassword, ypasschgdt, failcnt,
+            yname, ytel, yadress, status, yfiller1, yfiller2, yfiller3,
+            regdt, upddt, regid, updid, last_logindt
+        ) VALUES (
+                     #{yid}, #{ypassword}, #{yprepassword}, #{ypasschgdt}, #{failcnt},
+                     #{yname}, #{ytel}, #{yadress}, #{status}, #{yfiller1}, #{yfiller2}, #{yfiller3},
+                     #{regdt}, #{upddt}, #{regid}, #{updid}, #{lastLogindt}
+                 )
+    </insert>
+
+</mapper>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title th:text="${title} ?: 'Home'">Home</title>
+
+    <link th:href="@{/css/mainFrame.css}" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- ✅ TOP 영역 -->
+<header class="topbar">
+    <!-- 모바일 메뉴 버튼 -->
+    <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+
+    <a href="/main" class="logo">
+        <img th:src="@{/images/home/logo.png}" alt="Logo"/>
+        <span>Hymh Web</span>
+    </a>
+
+    <div class="user-info" th:if="${session.user != null}">
+        <span th:text="${session.user.getYname() + ' 님'}"></span>
+        <a href="/logout" class="logout-btn">Logout</a>
+    </div>
+</header>
+
+
+<!-- ✅ 본문 전체 -->
+<div class="container">
+
+    <!-- ✅ LEFT Sidebar -->
+    <nav id="sidebar" class="sidebar">
+        <ul>
+            <li><a href="/main">Main</a></li>
+            <li><a href="/memo">기록장</a></li>
+            <li><a href="/log">로그 조회</a></li>
+            <li><a href="/board">게시판</a></li>
+        </ul>
+    </nav>
+
+
+    <!-- ✅ 오른쪽 본문 (fragment 삽입 영역) -->
+    <main class="main-content">
+        <div th:insert="${tpl} :: ${frag}"></div>
+    </main>
+
+
+</div>
+
+
+<script>
+    function toggleSidebar() {
+        document.getElementById("sidebar").classList.toggle("open");
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,51 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>회원가입</title>
+
+    <!-- CSS -->
+    <link th:href="@{/css/register.css}" rel="stylesheet"/>
+
+</head>
+
+<body>
+
+<div class="auth-container">
+
+    <h2 class="auth-title">회원가입</h2>
+
+    <form method="post" action="/register" class="auth-form">
+
+        <div class="input-group">
+            <label>아이디</label>
+            <input type="text" name="yid" placeholder="아이디를 입력하세요" required/>
+        </div>
+
+        <div class="input-group">
+            <label>비밀번호</label>
+            <input type="password" name="password" placeholder="비밀번호를 입력하세요" required/>
+        </div>
+
+        <div class="input-group">
+            <label>이름</label>
+            <input type="text" name="yname" placeholder="이름을 입력하세요" required/>
+        </div>
+
+        <div class="input-group">
+            <label>전화번호</label>
+            <input type="text" name="ytel" placeholder="010-0000-0000"/>
+        </div>
+
+        <button type="submit" class="auth-btn primary">가입하기</button>
+
+    </form>
+
+    <p class="auth-bottom">
+        이미 계정이 있나요?
+        <a href="/login">로그인 하기</a>
+    </p>
+
+</div>
+
+</body>
+</html>
