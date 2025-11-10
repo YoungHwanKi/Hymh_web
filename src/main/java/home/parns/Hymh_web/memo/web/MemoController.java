@@ -17,10 +17,11 @@ public class MemoController {
     @GetMapping("/memo")
     public String memo(Model model) {
         List<MemoVo> memoList = memoService.getMemoList();
+        model.addAttribute("memoList", memoList);
         
         model.addAttribute("tpl", "memo/firstPage");   // 템플릿 경로만
         model.addAttribute("frag", "content");    // 프래그먼트 이름만
-        model.addAttribute("memoList", memoList);
+
 
         return "main/home";
     }

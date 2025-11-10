@@ -6,7 +6,6 @@
     <title th:text="${title} ?: 'Home'">Home</title>
 
     <link th:href="@{/css/mainFrame.css}" rel="stylesheet">
-    <link th:href="@{/css/memo.css}" rel="stylesheet"/>
 </head>
 
 <body>
@@ -16,10 +15,10 @@
     <!-- 모바일 메뉴 버튼 -->
     <button class="menu-btn" onclick="toggleSidebar()">☰</button>
 
-    <div class="logo">
-        <img th:src="@{/images/logo.png}" alt="Logo"/>
+    <a href="/main" class="logo">
+        <img th:src="@{/images/home/logo.png}" alt="Logo"/>
         <span>Hymh Web</span>
-    </div>
+    </a>
 
     <div class="user-info" th:if="${session.user != null}">
         <span th:text="${session.user.getYname() + ' 님'}"></span>
@@ -41,17 +40,11 @@
         </ul>
     </nav>
 
-    <main class="content">
-        <div th:replace="~{${tpl} :: ${frag}}"></div>
+
+    <!-- ✅ 오른쪽 본문 (fragment 삽입 영역) -->
+    <main class="main-content">
+        <div th:insert="${tpl} :: ${frag}"></div>
     </main>
-    <!-- ✅ 오른쪽 컨텐츠 -->
-<!--    <main class="content">-->
-<!--        <div th:replace="~{${#strings.trim(content)}}"></div>-->
-<!--         &lt;!&ndash;p>==[[${content}]]==</p&ndash;&gt;-->
-<!--        &lt;!&ndash;div th:replace="~{${content}}"></div&ndash;&gt;-->
-<!--        &lt;!&ndash;div th:replace="~{main/main :: content}"></div&ndash;&gt;-->
-<!--        &lt;!&ndash;div th:replace="~{${content}}">${content}</div&ndash;&gt;-->
-<!--    </main>-->
 
 
 </div>
