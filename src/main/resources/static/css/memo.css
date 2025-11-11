@@ -26,15 +26,17 @@
     background: #435dcc;
 }
 
+.main-content {
+    min-width: 0;      /* ✅ flex 오버플로 방지 */
+    overflow-x: auto;  /* ✅ 테이블 가로 스크롤 허용 */
+    max-width: 80%;
+    margin: 0 auto;
+}
+
 /* 테이블 기본 */
 .memo-table {
     width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed;
-    font-family: "Pretendard", "Noto Sans KR", sans-serif;
-    border: 1px solid #c7d1e4;
-    border-radius: 6px;
-    overflow: hidden;
+    max-width: 100%;   /* ✅ 사이드바 밀리는 문제 방지 */
 }
 
 /* 헤더 */
@@ -100,22 +102,40 @@
     text-align: center;
 }
 
-/* 반응형 - 모바일 */
+
+/* ✅  모바일 반응형 */
 @media (max-width: 768px) {
 
-    .memo-title {
-        font-size: 20px;
+    .topbar {
+        justify-content: flex-start;   /* 왼쪽 정렬 */
+        gap: 10px;                     /* 요소 간 간격 조정 */
     }
 
-    .memo-table th:nth-child(3),
-    .memo-table td:nth-child(3),
-    .memo-table th:nth-child(4),
-    .memo-table td:nth-child(4) {
-        font-size: 14px;
+    .logo {
+        margin-left: 8px;
     }
 
-    .memo-btn {
-        font-size: 13px;
-        padding: 7px 12px;
+
+    /* 메뉴 버튼 보이기 */
+    .menu-btn {
+        display: block;
+    }
+
+    /* 사이드바 기본 숨김 */
+    .sidebar {
+        position: fixed;
+        top: 58px;
+        left: -200px;
+        height: calc(100vh - 58px);
+        z-index: 99;
+    }
+
+    /* 열릴 때 */
+    .sidebar.open {
+        left: 0;
+    }
+
+    .content {
+        width: 100%;
     }
 }

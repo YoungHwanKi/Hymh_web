@@ -17,5 +17,5 @@ mybatis:
   type-aliases-package: com.example.demo.model
 
 server:
-  port: 8102  # 웹 브라우저에서 http://localhost 로도 접근 가능 아니얔ㅋㅋ
+  port: 8102  # PORT
 
