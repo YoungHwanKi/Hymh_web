@@ -44,7 +44,7 @@
             regdt, upddt, regid, updid, last_logindt
         ) VALUES (
                      #{yid}, #{ypassword}, #{yprepassword}, #{ypasschgdt}, #{failcnt},
-                     #{yname}, #{ytel}, #{yadress}, #{status}, #{yfiller1}, #{yfiller2}, #{yfiller3},
+                     #{yname}, #{ytel}, #{yadress}, '1', #{yfiller1}, #{yfiller2}, #{yfiller3},
                      #{regdt}, #{upddt}, #{regid}, #{updid}, #{lastLogindt}
                  )
     </insert>

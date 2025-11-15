@@ -163,3 +163,8 @@ input[type="password"]:focus {
         width: 90%;
     }
 }
+
+
+.form-checkbox {
+    margin-top: 5px;
+}
