@@ -5,7 +5,11 @@
 
 <mapper namespace="home.parns.Hymh_web.memo.mapper.MemoMapper">
 
-    <select id="getMemoList" resultType="home.parns.Hymh_web.memo.vo.MemoVo">
+    <select id="getMemoCount" resultType="int">
+        SELECT COUNT(*) FROM tb_memo
+    </select>
+
+    <select id="getMemoListPaged" resultType="home.parns.Hymh_web.memo.vo.MemoVo">
         SELECT
             seq,
             title,
@@ -22,6 +26,7 @@
         FROM tb_memo
         WHERE use_cl = 'Y'
         ORDER BY seq DESC
+        LIMIT #{size} OFFSET #{start}
     </select>
 
 </mapper>

@@ -33,11 +33,39 @@
 
     <!-- ✅ LEFT Sidebar -->
     <nav id="sidebar" class="sidebar">
-        <ul>
-            <li><a href="/main">Main</a></li>
-            <li><a href="/memo">기록장</a></li>
-            <li><a href="/log">로그 조회</a></li>
-            <li><a href="/board">게시판</a></li>
+        <ul class="menu">
+
+            <li class="menu-parent">
+                <span class="parent-title">DashBoard</span>
+                <ul class="submenu">
+                    <li><a href="/main">메인</a></li>
+                </ul>
+            </li>
+
+            <li class="menu-parent">
+                <span class="parent-title">메모 관리</span>
+                <ul class="submenu">
+                    <li><a href="/memo">기록장</a></li>
+                </ul>
+            </li>
+
+            <li class="menu-parent">
+                <span class="parent-title">로그 관리</span>
+                <ul class="submenu">
+                    <li><a href="/log">로그 조회</a></li>
+                    <li><a href="/log/stat">통계</a></li>
+                </ul>
+            </li>
+
+            <li class="menu-parent">
+                <span class="parent-title">게시판</span>
+                <ul class="submenu">
+                    <li><a href="/board">게시판 메인</a></li>
+                    <li><a href="/board/free">자유게시판</a></li>
+                    <li><a href="/board/notice">공지사항</a></li>
+                </ul>
+            </li>
+
         </ul>
     </nav>
 
@@ -55,6 +83,45 @@
     function toggleSidebar() {
         document.getElementById("sidebar").classList.toggle("open");
     }
+
+
+    // ▣ 기능 1: 상위 메뉴 클릭 시 다른 메뉴 닫고, 클릭한 메뉴만 열리는 아코디언
+    document.querySelectorAll(".parent-title").forEach(parent => {
+        parent.addEventListener("click", () => {
+            const submenu = parent.nextElementSibling;
+            const isOpen = submenu.style.display === "block";
+
+            // 모든 메뉴 닫기
+            document.querySelectorAll(".submenu").forEach(m => m.style.display = "none");
+            document.querySelectorAll(".parent-title").forEach(t => t.classList.remove("active"));
+
+            // 클릭한 메뉴 열기
+            if (!isOpen) {
+                submenu.style.display = "block";
+                parent.classList.add("active");
+            }
+        });
+    });
+
+
+    // ▣ 기능 2: 현재 URL의 메뉴 활성화 + 상위 카테고리 자동 Open
+    const currentPath = window.location.pathname;
+
+    document.querySelectorAll(".submenu li a").forEach(link => {
+        if (link.getAttribute("href") === currentPath) {
+
+            // (1) 현재 메뉴에 active 적용
+            link.classList.add("active");
+
+            // (2) 상위 submenu 열기
+            const submenu = link.closest(".submenu");
+            submenu.style.display = "block";
+
+            // (3) 상위 메뉴 active 표시
+            const parentTitle = submenu.previousElementSibling;
+            parentTitle.classList.add("active");
+        }
+    });
 </script>
 
 </body>

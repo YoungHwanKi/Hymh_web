@@ -25,4 +25,41 @@
         </tr>
         </tbody>
     </table>
+
+    <div class="page-size-selector">
+        <form id="pageSizeForm" method="get" action="/memo">
+            <select name="size" onchange="document.getElementById('pageSizeForm').submit()">
+                <option th:value="10" th:selected="${size == 10}">10개씩 보기</option>
+                <option th:value="20" th:selected="${size == 20}">20개씩 보기</option>
+                <option th:value="30" th:selected="${size == 30}">30개씩 보기</option>
+                <option th:value="50" th:selected="${size == 50}">50개씩 보기</option>
+            </select>
+            <input type="hidden" name="page" th:value="${currentPage}">
+        </form>
+    </div>
+
+
+    <!-- 페이지 네비게이션 -->
+    <div class="pagination">
+        <ul>
+
+            <!-- 이전 -->
+            <li th:if="${currentPage > 1}">
+                <a th:href="@{/memo(page=${currentPage - 1})}">◀ 이전</a>
+            </li>
+
+            <!-- 페이지 번호 -->
+            <li th:each="pageNum : ${#numbers.sequence(1, totalPages)}"
+                th:classappend="${pageNum == currentPage} ? 'active'">
+                <a th:text="${pageNum}"
+                   th:href="@{/memo(page=${pageNum})}"></a>
+            </li>
+
+            <!-- 다음 -->
+            <li th:if="${currentPage < totalPages}">
+                <a th:href="@{/memo(page=${currentPage + 1})}">다음 ▶</a>
+            </li>
+
+        </ul>
+    </div>
 </div>

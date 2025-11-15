@@ -25,17 +25,27 @@ public class LoginService {
 
 //        logger.info(">>>>>>>>>>>>>>>>"+yid);
 //        logger.info(">>>>>>>>>>>>>>>>"+rawPassword);
+
+        // 존재하지 않는
         HymhUserVo user = hymhUserMapper.findById(yid);
         if (user == null) return null;
 
+
+        // 성공시
         if (user.getYpassword() != null && encoder.matches(rawPassword, user.getYpassword())) {
-            user.setFailcnt(0);
-            user.setLastLogindt(LocalDateTime.now());
-            hymhUserMapper.updateLoginInfo(user);
-            return user;
+
+            if(user.getFailcnt().intValue() >= 5 ){
+                // 패스워드 입력이 5회이상일 경우
+                return user;
+            }else {
+                user.setFailcnt(0);
+                user.setLastLogindt(LocalDateTime.now());
+                hymhUserMapper.updateLoginInfo(user);
+                return user;
+            }
         }
 
-        // 실패 처리
+        // 존재하지만 실패 처리
         Integer fail = user.getFailcnt() == null ? 0 : user.getFailcnt();
         user.setFailcnt(fail + 1);
         hymhUserMapper.updateLoginInfo(user);
