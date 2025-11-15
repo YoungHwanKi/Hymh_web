@@ -6,6 +6,7 @@
     <title th:text="${title} ?: 'Home'">Home</title>
 
     <link th:href="@{/css/mainFrame.css}" rel="stylesheet">
+    <link th:href="@{/css/memo.css}" rel="stylesheet">
 </head>
 
 <body>
@@ -43,7 +44,7 @@
 
     <!-- ✅ 오른쪽 본문 (fragment 삽입 영역) -->
     <main class="main-content">
-        <div th:insert="${tpl} :: ${frag}"></div>
+        <div th:insert="~{${tpl} :: ${frag}}"></div>
     </main>
 
 

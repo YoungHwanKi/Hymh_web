@@ -31,6 +31,21 @@ body {
     padding: 0 18px;
 }
 
+/* menu + logo 묶어 처리 */
+.top-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* 오른쪽 정렬 */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-left: auto;   /* 핵심!! 오른쪽 끝으로 이동 */
+}
+
 
 .logo {
     text-decoration: none;   /* 밑줄 제거 */
@@ -125,132 +140,3 @@ body {
 
 
 
-/* 제목 */
-.memo-title {
-    margin-bottom: 16px;
-    font-size: 22px;
-    font-weight: 600;
-    color: #354569;
-}
-
-/* 버튼 영역 */
-.memo-btn-area {
-    text-align: right;
-    margin-bottom: 14px;
-}
-
-/* 새 메모 버튼 */
-.memo-btn {
-    padding: 8px 14px;
-    background: #5271FF;
-    color: white;
-    text-decoration: none;
-    border-radius: 6px;
-    font-size: 14px;
-    transition: 0.2s;
-}
-.memo-btn:hover {
-    background: #435dcc;
-}
-
-/* 테이블 기본 */
-.memo-table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed;
-    font-family: "Pretendard", "Noto Sans KR", sans-serif;
-    border: 1px solid #c7d1e4;
-    border-radius: 6px;
-    overflow: hidden;
-}
-
-/* 헤더 */
-.memo-table thead tr {
-    background: #4A6FA5;
-    color: white;
-    font-weight: bold;
-    text-align: center;
-}
-
-/* 셀 */
-.memo-table th,
-.memo-table td {
-    padding: 12px 10px;
-    border-bottom: 1px solid #d0d7e5;
-    font-size: 15px;
-    word-break: break-word;
-}
-
-/* 마지막 border 제거 */
-.memo-table tbody tr:last-child td {
-    border-bottom: none;
-}
-
-/* zebra row */
-.memo-table tbody tr:nth-child(even) {
-    background: #f7f9ff;
-}
-
-/* hover */
-.memo-table tbody tr:hover {
-    background: #e3ecff;
-    cursor: pointer;
-}
-
-/* 제목 링크 */
-.memo-table .title a {
-    color: #2b72ff;
-    text-decoration: none;
-    font-weight: 500;
-}
-
-.memo-table .title a:hover {
-    text-decoration: underline;
-}
-
-/* 컬럼 넓이 조정 */
-.memo-table th:nth-child(1),
-.memo-table td:nth-child(1) {
-    width: 80px;
-    text-align: center;
-}
-
-.memo-table th:nth-child(3),
-.memo-table td:nth-child(3) {
-    width: 150px;
-    text-align: center;
-}
-
-.memo-table th:nth-child(4),
-.memo-table td:nth-child(4) {
-    width: 180px;
-    text-align: center;
-}
-
-
-/* ✅  모바일 반응형 */
-@media (max-width: 768px) {
-
-    /* 메뉴 버튼 보이기 */
-    .menu-btn {
-        display: block;
-    }
-
-    /* 사이드바 기본 숨김 */
-    .sidebar {
-        position: fixed;
-        top: 58px;
-        left: -200px;
-        height: calc(100vh - 58px);
-        z-index: 99;
-    }
-
-    /* 열릴 때 */
-    .sidebar.open {
-        left: 0;
-    }
-
-    .content {
-        width: 100%;
-    }
-}
