@@ -15,6 +15,7 @@ public class MemoVo {
     private Integer depth;
     private Long superSeq;
     private String yid;
+    private String yname;
     private String regdt;
     private String upddt;
 

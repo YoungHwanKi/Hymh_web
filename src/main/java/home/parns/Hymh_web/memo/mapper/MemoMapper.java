@@ -8,6 +8,18 @@ import java.util.List;
 
 @Mapper
 public interface MemoMapper {
-    int getMemoCount();
-    List<MemoVo> getMemoListPaged(@Param("start") int start, @Param("size") int size);
+
+    int getMemoCount(@Param("searchType") String searchType,
+                     @Param("keyword") String keyword,
+                     @Param("startDate") String startDate,
+                     @Param("endDate") String endDate);
+
+    List<MemoVo> getMemoListPaged(@Param("start") int start,
+                                  @Param("size") int size,
+                                  @Param("searchType") String searchType,
+                                  @Param("keyword") String keyword,
+                                  @Param("startDate") String startDate,
+                                  @Param("endDate") String endDate);
+
+    MemoVo getMemoDetail(long seq);
 }

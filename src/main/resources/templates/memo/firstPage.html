@@ -1,12 +1,55 @@
 <div th:fragment="content">
     <h2 class="memo-title">📒 메모 리스트</h2>
+
+
+    <div class="search-container">
+        <div class="search-title">🔍 검색</div>
+
+        <form method="get" action="/memo" class="search-form" onsubmit="return validateDateRange();">
+
+            <!-- 검색항목 선택 -->
+            <div class="search-item">
+                <label>검색조건</label>
+                <select name="searchType" id="searchType" class="search-select"
+                        onchange="changeSearchPlaceholder()">
+                    <option value="title" th:selected="${searchType == 'title'}">제목</option>
+                    <option value="writer" th:selected="${searchType == 'writer'}">작성자</option>
+                </select>
+            </div>
+
+            <!-- 검색어 입력 -->
+            <div class="search-item">
+                <label>검색어</label>
+                <input type="text" name="keyword" id="keywordInput"
+                       th:value="${keyword}"
+                       placeholder="검색어를 입력하세요"
+                       class="search-input">
+            </div>
+
+            <!-- 날짜 -->
+            <div class="search-item">
+                <label>등록일</label>
+                <div class="date-range">
+                    <input type="date" name="startDate" th:value="${startDate}" class="date-input" id="startDate">
+                    <span class="date-sep">~</span>
+                    <input type="date" name="endDate" th:value="${endDate}" class="date-input" id="endDate">
+                </div>
+            </div>
+
+            <button type="submit" class="search-btn">검색</button>
+            <input type="hidden" name="size" th:value="${size}">
+        </form>
+    </div>
+
+
     <div class="memo-btn-area">
         <a href="/memo/new" class="memo-btn">+ 새 메모</a>
     </div>
+
     <table class="memo-table">
         <thead>
         <tr>
-            <th>No</th>
+            <th>번호</th>
             <th>제목</th>
             <th>작성자</th>
             <th>등록일</th>
@@ -15,17 +58,22 @@
         <tbody>
         <tr th:each="memo : ${memoList}">
             <td th:text="${memo.seq}"></td>
+
             <td class="title">
-                <a th:href="@{/memo/{seq}(seq=${memo.seq})}"
-                   th:text="${memo.title}">
+                <a href="javascript:void(0)"
+                   th:onclick="|openPopup(${memo.seq})|">
+                    <span th:text="${memo.title}"></span>
                 </a>
             </td>
-            <td th:text="${memo.yid}"></td>
+
+
+            <td th:text="${memo.yname}"></td>
             <td th:text="${memo.regdt}"></td>
         </tr>
         </tbody>
     </table>
 
+    <!-- 한 페이지에 몇 개씩 볼지 선택 -->
     <div class="page-size-selector">
         <form id="pageSizeForm" method="get" action="/memo">
             <select name="size" onchange="document.getElementById('pageSizeForm').submit()">
@@ -34,32 +82,205 @@
                 <option th:value="30" th:selected="${size == 30}">30개씩 보기</option>
                 <option th:value="50" th:selected="${size == 50}">50개씩 보기</option>
             </select>
+
+            <!-- 현재 페이지 유지 -->
             <input type="hidden" name="page" th:value="${currentPage}">
+
+            <!-- 조회 조건 유지 -->
+            <input type="hidden" name="searchType" th:value="${searchType}">
+            <input type="hidden" name="keyword" th:value="${keyword}">
+            <input type="hidden" name="startDate" th:value="${startDate}">
+            <input type="hidden" name="endDate" th:value="${endDate}">
         </form>
     </div>
-
 
     <!-- 페이지 네비게이션 -->
     <div class="pagination">
         <ul>
 
-            <!-- 이전 -->
+            <!-- ◀◀ 맨 처음 -->
             <li th:if="${currentPage > 1}">
-                <a th:href="@{/memo(page=${currentPage - 1})}">◀ 이전</a>
+                <a th:href="@{/memo(
+        page=1,
+        size=${size},
+        searchType=${searchType},
+        keyword=${keyword},
+        startDate=${startDate},
+        endDate=${endDate}
+    )}">◀◀ 처음</a>
+            </li>
+
+            <!-- ◀ 이전 -->
+            <li th:if="${currentPage > 1}">
+                <a th:href="@{/memo(
+        page=${currentPage - 1},
+        size=${size},
+        searchType=${searchType},
+        keyword=${keyword},
+        startDate=${startDate},
+        endDate=${endDate}
+    )}">◀ 이전</a>
             </li>
 
             <!-- 페이지 번호 -->
-            <li th:each="pageNum : ${#numbers.sequence(1, totalPages)}"
+            <li th:each="pageNum : ${#numbers.sequence(startPage, endPage)}"
                 th:classappend="${pageNum == currentPage} ? 'active'">
                 <a th:text="${pageNum}"
-                   th:href="@{/memo(page=${pageNum})}"></a>
+                   th:href="@{/memo(
+           page=${pageNum},
+           size=${size},
+           searchType=${searchType},
+           keyword=${keyword},
+           startDate=${startDate},
+           endDate=${endDate}
+       )}"></a>
             </li>
 
-            <!-- 다음 -->
+            <!-- 다음 ▶ -->
             <li th:if="${currentPage < totalPages}">
-                <a th:href="@{/memo(page=${currentPage + 1})}">다음 ▶</a>
+                <a th:href="@{/memo(
+        page=${currentPage + 1},
+        size=${size},
+        searchType=${searchType},
+        keyword=${keyword},
+        startDate=${startDate},
+        endDate=${endDate}
+    )}">다음 ▶</a>
+            </li>
+
+            <!-- 마지막 ▶▶ -->
+            <li th:if="${currentPage < totalPages}">
+                <a th:href="@{/memo(
+        page=${totalPages},
+        size=${size},
+        searchType=${searchType},
+        keyword=${keyword},
+        startDate=${startDate},
+        endDate=${endDate}
+    )}">마지막 ▶▶</a>
             </li>
 
         </ul>
     </div>
+
+    <script>
+        // placeholder 변경 기능 유지
+        function changeSearchPlaceholder() {
+            const type = document.getElementById("searchType").value;
+            const input = document.getElementById("keywordInput");
+
+            input.placeholder = type === "title" ? "제목을 입력하세요" : "작성자를 입력하세요";
+        }
+
+        // 날짜 범위 1달 제한
+        function validateDateRange() {
+            const start = document.getElementById("startDate").value;
+            const end = document.getElementById("endDate").value;
+
+            if (start && end) {
+                const s = new Date(start);
+                const e = new Date(end);
+
+                const diff = (e - s) / (1000 * 60 * 60 * 24);
+
+                if (diff < 0) {
+                    alert("종료일은 시작일보다 빠를 수 없습니다.");
+                    return false;
+                }
+                if (diff > 31) {
+                    alert("검색 기간은 최대 1개월(31일)까지만 가능합니다.");
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        // ⭐ 날짜가 비어있으면 오늘 날짜로 자동 설정
+        function initDateDefault() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, "0");
+            const day = String(now.getDate()).padStart(2, "0");
+            const today = `${year}-${month}-${day}`;
+
+            const startInput = document.getElementById("startDate");
+            const endInput = document.getElementById("endDate");
+
+            if (startInput && !startInput.value) startInput.value = today;
+            if (endInput && !endInput.value) endInput.value = today;
+        }
+
+        // 페이지 로드시 실행
+        changeSearchPlaceholder();
+        initDateDefault();
+
+
+        // 📌 팝업 열기
+        function openPopup(seq) {
+
+            fetch("/memo/detail?seq=" + seq)
+                .then(res => {
+                    if (!res.ok) throw new Error("서버 오류: " + res.status);
+                    return res.json();
+                })
+                .then(data => {
+
+                    // 콘솔 디버깅
+                    console.log("📌 팝업 데이터:", data);
+
+                    // 제목
+                    document.getElementById("popupTitle").innerText =
+                        data.title ?? "(제목 없음)";
+
+                    // 작성자 + 등록일
+                    document.getElementById("popupInfo").innerText =
+                        (data.yname ?? "") + " | " + (data.regdt ?? "");
+
+                    // 내용 (memo 필드)
+                    document.getElementById("popupMemo").innerText =
+                        data.memo ?? "(내용 없음)";
+
+                    // 수정 버튼
+                    document.getElementById("popupEditBtn").onclick =
+                        () => location.href = "/memo/edit?seq=" + seq;
+
+                    // 팝업 열기
+                    document.getElementById("memoPopup").style.display = "flex";
+                })
+                .catch(err => {
+                    alert("팝업 데이터를 불러오지 못했습니다.\n" + err);
+                    console.error(err);
+                });
+        }
+
+        // 📌 팝업 닫기
+        function closePopup() {
+            document.getElementById("memoPopup").style.display = "none";
+        }
+
+    </script>
+
+
+    <!-- ======================= -->
+    <!-- 📌 메모 상세 팝업 레이어 -->
+    <!-- ======================= -->
+    <div class="memo-popup-overlay" id="memoPopup">
+        <div class="memo-popup">
+            <div class="popup-header">
+                <h3 id="popupTitle">제목</h3>
+                <span id="popupInfo">작성자 | 등록일</span>
+            </div>
+
+            <div class="popup-memo" id="popupMemo">
+                내용이 들어갑니다...
+            </div>
+
+            <div class="popup-buttons">
+                <button class="popup-btn edit-btn" id="popupEditBtn">수정</button>
+                <button class="popup-btn close-btn" onclick="closePopup()">닫기</button>
+            </div>
+        </div>
+    </div>
+
 </div>
+

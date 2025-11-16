@@ -1,144 +1,130 @@
+/* ===================================== */
+/*        📌 기본 폰트 사이즈 통일        */
+/* ===================================== */
+body {
+    font-size: 13px;
+    color: #354569;
+}
+
 /* 제목 */
 .memo-title {
-    margin-bottom: 16px;
-    font-size: 22px;
+    margin-bottom: 12px;
+    font-size: 17px;
     font-weight: 600;
     color: #354569;
 }
 
-/* 버튼 영역 */
+/* 새 메모 버튼 */
 .memo-btn-area {
     text-align: right;
     margin-bottom: 14px;
 }
 
-/* 새 메모 버튼 */
 .memo-btn {
-    padding: 8px 14px;
+    padding: 7px 12px;
     background: #5271FF;
     color: white;
     text-decoration: none;
     border-radius: 6px;
-    font-size: 14px;
+    font-size: 13px;
     transition: 0.2s;
 }
 .memo-btn:hover {
     background: #435dcc;
 }
 
-.main-content {
-    min-width: 0;      /* ✅ flex 오버플로 방지 */
-    overflow-x: auto;  /* ✅ 테이블 가로 스크롤 허용 */
-    max-width: 80%;
-    margin: 0 auto;
-}
 
-/* 테이블 기본 */
+/* ========================= */
+/*        📌 테이블          */
+/* ========================= */
 .memo-table {
     width: 100%;
-    max-width: 100%;   /* ✅ 사이드바 밀리는 문제 방지 */
+    font-size: 13px;
 }
 
-/* 헤더 */
 .memo-table thead tr {
     background: #4A6FA5;
     color: white;
-    font-weight: bold;
+    font-weight: 600;
+    font-size: 13px;
     text-align: center;
 }
 
-/* 셀 */
 .memo-table th,
 .memo-table td {
-    padding: 12px 10px;
+    padding: 10px 8px;
     border-bottom: 1px solid #d0d7e5;
-    font-size: 15px;
-    word-break: break-word;
+    font-size: 13px;
 }
 
-/* 마지막 border 제거 */
-.memo-table tbody tr:last-child td {
-    border-bottom: none;
-}
-
-/* zebra row */
 .memo-table tbody tr:nth-child(even) {
     background: #f7f9ff;
 }
 
-/* hover */
 .memo-table tbody tr:hover {
     background: #e3ecff;
-    cursor: pointer;
 }
 
-/* 제목 링크 */
 .memo-table .title a {
     color: #2b72ff;
     text-decoration: none;
-    font-weight: 500;
+    font-size: 13px;
 }
-
 .memo-table .title a:hover {
     text-decoration: underline;
 }
 
-/* 컬럼 넓이 조정 */
+/* 컬럼 넓이 정리 */
 .memo-table th:nth-child(1),
-.memo-table td:nth-child(1) {
-    width: 80px;
-    text-align: center;
-}
+.memo-table td:nth-child(1) { width: 60px; text-align: center; }
 
 .memo-table th:nth-child(3),
-.memo-table td:nth-child(3) {
-    width: 150px;
-    text-align: center;
-}
+.memo-table td:nth-child(3) { width: 120px; text-align: center; }
 
 .memo-table th:nth-child(4),
-.memo-table td:nth-child(4) {
-    width: 180px;
-    text-align: center;
-}
+.memo-table td:nth-child(4) { width: 160px; text-align: center; }
 
 
-/* 1) 페이지 사이즈 선택 */
-.page-size-selector {
-    text-align: right;
-    margin-bottom: 10px;
-}
-
+/* ========================= */
+/*  페이지 사이즈 선택, 페이징 */
+/* ========================= */
 .page-size-selector select {
-    padding: 6px 10px;
+    padding: 3px 6px;
     border: 1px solid #cbd4ea;
     border-radius: 6px;
     background: #f9fbff;
-    font-size: 14px;
+    font-size: 10px;
 }
 
-/* 2) 페이징 */
+/* 페이징 전체 중앙 배치 */
 .pagination {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;   /* 정렬 안정화 */
+    margin: 15px 0;
     text-align: center;
-    margin-top: 20px;
 }
 
+/* 번호 목록 */
 .pagination ul {
-    list-style: none;
-    display: inline-flex;
-    gap: 6px;
+    display: flex;
+    gap: 4px;
     padding: 0;
+    margin: 0;
+    list-style: none;
 }
 
+/* 개별 페이지 버튼 (축소된 버전) */
 .pagination ul li a {
-    display: block;
-    padding: 6px 12px;
+    padding: 3px 7px;       /* 기존보다 축소 */
     background: #eef3ff;
     border: 1px solid #cdd7f3;
-    border-radius: 6px;
+    border-radius: 5px;
     color: #3366cc;
     text-decoration: none;
-    font-size: 14px;
+    font-size: 11px;        /* 축소 */
+    line-height: 1;
 }
 
 .pagination ul li.active a {
@@ -149,11 +135,173 @@
 
 .pagination ul li a:hover {
     background: #dfe9ff;
-    border-color: #bfcdf0;
 }
 
 
-/* ✅  모바일 반응형 */
+/* ========================================= */
+/*         🔍 검색(카드형) 전체 디자인        */
+/* ========================================= */
+.search-container {
+    border: 1px solid #cbd4ea;
+    background: #f9fbff;
+    padding: 14px 16px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.search-title {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+
+/* 검색 form 레이아웃 */
+.search-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 18px;
+    align-items: flex-end;
+}
+
+/* 검색 항목 그룹 */
+.search-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.search-item label {
+    font-size: 12px;
+    font-weight: 600;
+    padding-left: 2px;
+    color: #354569;
+}
+
+/* input / select 공통 디자인 */
+.search-select,
+.search-input,
+.date-input {
+    padding: 6px 10px;
+    border: 1px solid #cbd4ea;
+    background: #fff;
+    border-radius: 6px;
+    font-size: 13px;
+    transition: 0.2s;
+}
+
+.search-select:focus,
+.search-input:focus,
+.date-input:focus {
+    border-color: #5271FF;
+    box-shadow: 0 0 3px rgba(82,113,255,0.3);
+}
+
+.date-range {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+.date-sep {
+    font-size: 13px;
+}
+
+
+/* 검색 버튼 */
+.search-btn {
+    padding: 7px 14px;
+    background: #5271FF;
+    border: 1px solid #435dcc;
+    border-radius: 6px;
+    color: white;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+.search-btn:hover {
+    background: #435dcc;
+}
+
+
+
+/* ======================= */
+/* 📌 메모 상세 팝업 스타일 */
+/* ======================= */
+
+.memo-popup-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.45);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+}
+
+.memo-popup {
+    background: white;
+    width: 90%;             /* 화면의 90%까지 사용 */
+    max-width: 480px;       /* 최대 넓이 */
+    max-height: 80vh;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 25px rgba(0,0,0,0.25);
+    display: flex;
+    flex-direction: column;
+}
+
+.popup-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+#popupInfo {
+    font-size: 12px;
+    color: #6c7b94;
+}
+
+
+.popup-memo {
+    margin-top: 12px;
+    padding: 12px;
+    border: 1px solid #d0d7e5;
+    border-radius: 6px;
+    background: #f9fbff;
+    min-height: 120px;
+    max-height: 50vh;      /* 화면 절반 높이 제한 */
+    overflow-y: auto;      /* 스크롤 생성 */
+    white-space: pre-wrap; /* 줄바꿈 + 공백 유지 */
+}
+
+.popup-buttons {
+    margin-top: 14px;
+    text-align: right;
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.popup-btn {
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.edit-btn {
+    background: #5271FF;
+    color: #fff;
+}
+
+.close-btn {
+    background: #d3d8e6;
+}
+
+/* 모바일 */
 @media (max-width: 768px) {
 
     .topbar {
@@ -188,4 +336,5 @@
     .content {
         width: 100%;
     }
+
 }

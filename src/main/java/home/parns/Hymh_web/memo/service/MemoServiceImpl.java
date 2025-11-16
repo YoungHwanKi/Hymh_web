@@ -14,12 +14,18 @@ public class MemoServiceImpl implements MemoService {
     private final MemoMapper memoMapper;
 
     @Override
-    public int getMemoCount() {
-        return memoMapper.getMemoCount();
+    public int getMemoCount(String searchType, String keyword, String startDate, String endDate) {
+        return memoMapper.getMemoCount(searchType, keyword, startDate, endDate);
     }
 
     @Override
-    public List<MemoVo> getMemoListPaged(int start, int size) {
-        return memoMapper.getMemoListPaged(start, size);
+    public List<MemoVo> getMemoListPaged(int start, int size,
+                                         String searchType, String keyword,
+                                         String startDate, String endDate) {
+        return memoMapper.getMemoListPaged(start, size, searchType, keyword, startDate, endDate);
+    }
+
+    public MemoVo getMemoDetail(long seq) {
+        return memoMapper.getMemoDetail(seq);
     }
 }

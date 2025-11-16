@@ -5,28 +5,74 @@
 
 <mapper namespace="home.parns.Hymh_web.memo.mapper.MemoMapper">
 
+    <!-- 전체 개수 -->
     <select id="getMemoCount" resultType="int">
-        SELECT COUNT(*) FROM tb_memo
+        SELECT COUNT(*)
+        FROM tb_memo a, tb_yuser u
+        WHERE a.YID = u.YID
+            <!-- 검색어가 있을 경우 -->
+            <if test="keyword != null and keyword != ''">
+                <choose>
+                    <when test="searchType == 'title'">
+                        AND a.TITLE LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                    <when test="searchType == 'writer'">
+                        AND u.YNAME LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                </choose>
+            </if>
+
+            <!-- 날짜 범위 -->
+            <if test="startDate != null and startDate != ''">
+                AND date_format(a.REGDT,'%Y-%m-%d') >= #{startDate}
+            </if>
+
+            <if test="endDate != null and endDate != ''">
+                AND date_format(a.REGDT,'%Y-%m-%d') &lt;= #{endDate}
+            </if>
     </select>
 
-    <select id="getMemoListPaged" resultType="home.parns.Hymh_web.memo.vo.MemoVo">
-        SELECT
-            seq,
-            title,
-            memo,
-            memo_type     AS memoType,
-            use_cl        AS useCl,
-            public_level  AS publicLevel,
-            use_type           AS useType,
-            depth,
-            super_seq     AS superSeq,
-            yid,
-            DATE_FORMAT(regdt, '%Y-%m-%d %H:%i') AS regdt,
-            DATE_FORMAT(upddt, '%Y-%m-%d %H:%i') AS upddt
-        FROM tb_memo
-        WHERE use_cl = 'Y'
-        ORDER BY seq DESC
+    <!-- 메모 리스트 -->
+    <select id="getMemoListPaged"
+            resultType="home.parns.Hymh_web.memo.vo.MemoVo">
+        SELECT a.SEQ, a.TITLE, a.YID, u.YNAME, a.REGDT
+        FROM tb_memo a, tb_yuser u
+        WHERE a.YID = u.YID
+            <!-- 검색어 있을 경우 -->
+            <if test="keyword != null and keyword != ''">
+                <choose>
+                    <when test="searchType == 'title'">
+                        AND a.TITLE LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                    <when test="searchType == 'writer'">
+                        AND u.YNAME LIKE CONCAT('%', #{keyword}, '%')
+                    </when>
+                </choose>
+            </if>
+
+            <!-- 날짜 FROM -->
+            <if test="startDate != null and startDate != ''">
+                AND date_format(a.REGDT,'%Y-%m-%d') >= #{startDate}
+            </if>
+
+            <!-- 날짜 TO -->
+            <if test="endDate != null and endDate != ''">
+                AND date_format(a.REGDT,'%Y-%m-%d') &lt;= #{endDate}
+            </if>
+        ORDER BY a.SEQ DESC
         LIMIT #{size} OFFSET #{start}
+    </select>
+
+    <select id="getMemoDetail" parameterType="long" resultType="home.parns.Hymh_web.memo.vo.MemoVo">
+        SELECT
+            a.SEQ,
+            a.TITLE,
+            a.MEMO,
+            u.YNAME,
+            a.REGDT
+        FROM tb_memo a, tb_yuser u
+        WHERE a.YID = u.YID
+        AND SEQ = #{seq}
     </select>
 
 </mapper>
