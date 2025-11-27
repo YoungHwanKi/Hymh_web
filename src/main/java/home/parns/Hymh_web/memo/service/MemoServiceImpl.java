@@ -28,4 +28,14 @@ public class MemoServiceImpl implements MemoService {
     public MemoVo getMemoDetail(long seq) {
         return memoMapper.getMemoDetail(seq);
     }
+
+    @Override
+    public int updateMemo(MemoVo memoVo) {
+       return memoMapper.updateMemo(memoVo);
+    }
+
+    @Override
+    public int insertMemo(MemoVo memoVo) {
+        return memoMapper.insertMemo(memoVo);
+    }
 }

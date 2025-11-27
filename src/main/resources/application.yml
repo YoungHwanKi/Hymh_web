@@ -19,7 +19,7 @@ mybatis:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 server:
-  port: 8102  # PORT
+  port: 8311  # PORT
 
 
 

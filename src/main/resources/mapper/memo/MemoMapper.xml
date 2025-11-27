@@ -24,18 +24,18 @@
 
             <!-- 날짜 범위 -->
             <if test="startDate != null and startDate != ''">
-                AND date_format(a.REGDT,'%Y-%m-%d') >= #{startDate}
+                AND date_format(a.UPDDT,'%Y-%m-%d') >= #{startDate}
             </if>
 
             <if test="endDate != null and endDate != ''">
-                AND date_format(a.REGDT,'%Y-%m-%d') &lt;= #{endDate}
+                AND date_format(a.UPDDT,'%Y-%m-%d') &lt;= #{endDate}
             </if>
     </select>
 
     <!-- 메모 리스트 -->
     <select id="getMemoListPaged"
             resultType="home.parns.Hymh_web.memo.vo.MemoVo">
-        SELECT a.SEQ, a.TITLE, a.YID, u.YNAME, a.REGDT
+        SELECT a.SEQ, a.TITLE, a.YID, u.YNAME, a.REGDT, a.UPDDT
         FROM tb_memo a, tb_yuser u
         WHERE a.YID = u.YID
             <!-- 검색어 있을 경우 -->
@@ -52,12 +52,12 @@
 
             <!-- 날짜 FROM -->
             <if test="startDate != null and startDate != ''">
-                AND date_format(a.REGDT,'%Y-%m-%d') >= #{startDate}
+                AND date_format(a.UPDDT,'%Y-%m-%d') >= #{startDate}
             </if>
 
             <!-- 날짜 TO -->
             <if test="endDate != null and endDate != ''">
-                AND date_format(a.REGDT,'%Y-%m-%d') &lt;= #{endDate}
+                AND date_format(a.UPDDT,'%Y-%m-%d') &lt;= #{endDate}
             </if>
         ORDER BY a.SEQ DESC
         LIMIT #{size} OFFSET #{start}
@@ -69,10 +69,24 @@
             a.TITLE,
             a.MEMO,
             u.YNAME,
-            a.REGDT
+            a.REGDT,
+            a.UPDDT
         FROM tb_memo a, tb_yuser u
         WHERE a.YID = u.YID
         AND SEQ = #{seq}
     </select>
 
+    <update id="updateMemo">
+        UPDATE tb_memo
+        SET
+            title = #{title},
+            memo  = #{memo},
+            upddt = NOW()
+        WHERE seq = #{seq}
+    </update>
+
+    <insert id="insertMemo">
+        INSERT INTO tb_memo(title, memo, memo_type, use_cl, public_level, use_type, depth, super_seq, yid, regdt, upddt)
+        VALUES (#{title}, #{memo}, '00', 'Y', '0', '', 0, null, #{yid}, NOW(), NOW())
+    </insert>
 </mapper>

@@ -1,15 +1,16 @@
 package home.parns.Hymh_web.memo.web;
 
+import home.parns.Hymh_web.common.util.HDateUtil;
+import home.parns.Hymh_web.login.vo.HymhUserVo;
 import home.parns.Hymh_web.memo.service.MemoService;
 import home.parns.Hymh_web.memo.vo.MemoVo;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,14 +31,27 @@ public class MemoController {
                            @RequestParam(required = false) String endDate,
                            Model model) {
 
+        //당일자를 가져오는 부분
+        String tempFromDate = HDateUtil.getDDay(-15, "yyyy-MM-dd");
+        String tempToDate = HDateUtil.formatDate(HDateUtil.getDate(), "yyyy-MM-dd");
+
         // 빈 문자열 체크 → null 처리
         if (keyword != null && keyword.trim().isEmpty()) keyword = null;
         if (searchType != null && searchType.trim().isEmpty()) searchType = null;
-        if (startDate != null && startDate.trim().isEmpty()) startDate = null;
-        if (endDate != null && endDate.trim().isEmpty()) endDate = null;
+        if (startDate != null && startDate.trim().isEmpty()) startDate = tempFromDate;
+        if (endDate != null && endDate.trim().isEmpty()) endDate = tempToDate;
 
-        logger.info("SearchType = {}", searchType);
+        if (startDate == null) startDate = tempFromDate;
+        if (endDate == null) endDate = tempToDate;
+
         logger.info("Keyword    = {}", keyword);
+        logger.info("SearchType = {}", searchType);
+        logger.info("startDate = {}", startDate);
+        logger.info("endDate = {}", endDate);
+
+        ;
+
+
 
         // 총 개수 조회
         int totalCount = memoService.getMemoCount(searchType, keyword, startDate, endDate);
@@ -78,6 +92,7 @@ public class MemoController {
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("size", size);
+        model.addAttribute("totalCount", totalCount);
 
         // ⭐ 페이지 범위 추가
         model.addAttribute("startPage", startPage);
@@ -101,5 +116,25 @@ public class MemoController {
     @ResponseBody
     public MemoVo memoDetail(@RequestParam Long seq) {
         return memoService.getMemoDetail(seq);
+    }
+
+    @PutMapping("/memo/update")
+    @ResponseBody
+    public String updateMemo(@RequestBody MemoVo memoVo) {
+        int result = memoService.updateMemo(memoVo);
+        return result > 0 ? "success" : "fail";
+    }
+
+    @PostMapping("/memo/insert")
+    @ResponseBody
+    public String insertMemo(@RequestBody MemoVo memoVo, HttpSession session) {
+
+        // 작성자 정보 세션 반영 (로그인 정보 가져옴)
+        HymhUserVo user = (HymhUserVo) session.getAttribute("user");
+        
+        memoVo.setYid(user.getYid());
+
+        int result = memoService.insertMemo(memoVo);
+        return result > 0 ? "success" : "fail";
     }
 }

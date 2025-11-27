@@ -84,6 +84,21 @@ body {
 .memo-table th:nth-child(4),
 .memo-table td:nth-child(4) { width: 160px; text-align: center; }
 
+.memo-table th:nth-child(5),
+.memo-table td:nth-child(5) { width: 160px; text-align: center; }
+
+
+
+
+.count-info {
+    font-size: 14px;
+    color: #444;
+    margin: 10px 0;
+}
+.count-info strong {
+    font-weight: bold;
+    color: #2a7be4;
+}
 
 /* ========================= */
 /*  페이지 사이즈 선택, 페이징 */
@@ -240,18 +255,6 @@ body {
     align-items: center;
 }
 
-.memo-popup {
-    background: white;
-    width: 90%;             /* 화면의 90%까지 사용 */
-    max-width: 480px;       /* 최대 넓이 */
-    max-height: 80vh;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 4px 25px rgba(0,0,0,0.25);
-    display: flex;
-    flex-direction: column;
-}
-
 .popup-header h3 {
     margin: 0;
     font-size: 18px;
@@ -337,4 +340,150 @@ body {
         width: 100%;
     }
 
+}
+
+
+/* ======================= */
+/* 📌 Desktop View (기본) */
+/* ======================= */
+.memo-popup {
+    width: 50vw;
+    max-width: 600px;
+    background: white;
+    border-radius: 12px;
+    max-height: 85vh;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    animation: popupFadeIn .25s ease-out;
+}
+
+/* ======================= */
+/* 📌 Tablet View (중간) */
+/* ======================= */
+@media (max-width: 1024px) {
+    .memo-popup {
+        width: 70vw;
+        max-width: none;
+        border-radius: 10px;
+    }
+}
+
+/* ======================= */
+/* 📌 Mobile View */
+/* ======================= */
+@media (max-width: 768px) {
+    .memo-popup {
+        width: 92vw;
+        height: auto;
+        max-height: 90vh;
+        border-radius: 10px;
+        padding: 16px;
+    }
+}
+
+/* 📌 작은 스마트폰 (아이폰SE 같은 작은 화면) */
+@media (max-width: 480px) {
+    .memo-popup {
+        width: 100vw;
+        height: 100vh;
+        max-height: none;
+        border-radius: 0;
+        padding: 18px;
+    }
+
+    /* 상단 정보 고정 (사용성 개선) */
+    .popup-header {
+        position: sticky;
+        top: 0;
+        background: white;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #ddd;
+        z-index: 1;
+    }
+
+    /* 하단 버튼 fixed */
+    .popup-buttons {
+        position: fixed;
+        bottom: 10px;
+        left: 0;
+        width: 100%;
+        justify-content: center;
+        background: rgba(255,255,255,0.9);
+        padding: 10px 0;
+    }
+
+    .popup-memo {
+        max-height: calc(100vh - 180px);
+    }
+}
+
+
+/* 애니메이션 */
+@keyframes popupFadeIn {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.memo-edit-popup-overlay {
+    display:none;
+    position: fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background: rgba(0,0,0,0.45);
+    z-index: 99999;
+    justify-content:center;
+    align-items:center;
+}
+
+.memo-edit-popup {
+    background:white;
+    width:50vw;
+    max-width:600px;
+    padding:20px;
+    border-radius:10px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.edit-input, .edit-textarea {
+    width:100%;
+    border:1px solid #ccc;
+    padding:10px;
+    border-radius:6px;
+}
+
+.edit-textarea { height:200px; }
+
+.edit-buttons {
+    display:flex;
+    justify-content:flex-end;
+    gap:10px;
+}
+
+.save-btn {
+    background:#5271FF;
+    color:white;
+    border:none;
+    padding:6px 14px;
+    border-radius:6px;
+    cursor:pointer;
+}
+.close-btn {
+    background:#dadada;
+}
+
+
+.memo-new-popup-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.45);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
 }

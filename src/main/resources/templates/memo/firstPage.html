@@ -28,7 +28,7 @@
 
             <!-- 날짜 -->
             <div class="search-item">
-                <label>등록일</label>
+                <label>최종수정일</label>
                 <div class="date-range">
                     <input type="date" name="startDate" th:value="${startDate}" class="date-input" id="startDate">
                     <span class="date-sep">~</span>
@@ -41,9 +41,12 @@
         </form>
     </div>
 
-
     <div class="memo-btn-area">
-        <a href="/memo/new" class="memo-btn">+ 새 메모</a>
+        <a href="javascript:void(0)" class="memo-btn" onclick="openNewPopup()">+ 새 메모</a>
+    </div>
+
+    <div class="count-info">
+        <strong th:text="${totalCount}"></strong> 건 조회됨
     </div>
 
     <table class="memo-table">
@@ -53,6 +56,7 @@
             <th>제목</th>
             <th>작성자</th>
             <th>등록일</th>
+            <th>최종수정일</th>
         </tr>
         </thead>
         <tbody>
@@ -69,6 +73,7 @@
 
             <td th:text="${memo.yname}"></td>
             <td th:text="${memo.regdt}"></td>
+            <td th:text="${memo.upddt}"></td>
         </tr>
         </tbody>
     </table>
@@ -232,17 +237,16 @@
                     document.getElementById("popupTitle").innerText =
                         data.title ?? "(제목 없음)";
 
-                    // 작성자 + 등록일
+                    // 작성자 + 수정일
                     document.getElementById("popupInfo").innerText =
-                        (data.yname ?? "") + " | " + (data.regdt ?? "");
+                        (data.yname ?? "") + " | " + (data.upddt ?? "");
 
                     // 내용 (memo 필드)
                     document.getElementById("popupMemo").innerText =
                         data.memo ?? "(내용 없음)";
 
                     // 수정 버튼
-                    document.getElementById("popupEditBtn").onclick =
-                        () => location.href = "/memo/edit?seq=" + seq;
+                    document.getElementById("popupEditBtn").onclick = () => openEditPopup(seq);
 
                     // 팝업 열기
                     document.getElementById("memoPopup").style.display = "flex";
@@ -256,6 +260,107 @@
         // 📌 팝업 닫기
         function closePopup() {
             document.getElementById("memoPopup").style.display = "none";
+        }
+
+
+        let currentSeq = null;
+
+        function openEditPopup(seq) {
+            currentSeq = seq;
+
+            // 기존 팝업 닫기
+            closePopup();
+
+            // 데이터 다시 불러오기
+            fetch("/memo/detail?seq=" + seq)
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById("editTitle").value = data.title ?? "";
+                    document.getElementById("editMemo").value = data.memo ?? "";
+
+                    document.getElementById("memoEditPopup").style.display = "flex";
+                });
+        }
+
+        function updateMemo() {
+
+            const title = document.getElementById("editTitle").value.trim();
+            const memo  = document.getElementById("editMemo").value.trim();
+
+            if (!title) {
+                alert("제목은 필수 입력입니다.");
+                return;
+            }
+
+            fetch("/memo/update", {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    seq: currentSeq,
+                    title: title,
+                    memo: memo
+                })
+            })
+                .then(res => res.text())
+                .then(response => {
+                    if (response === "success") {
+                        alert("📌 수정 완료!");
+                        closeEditPopup();
+                        location.reload();
+                    } else {
+                        alert("❌ 수정 실패 (DB 갱신 안됨)");
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert("❌ 서버 오류: " + err);
+                });
+        }
+
+        function closeEditPopup() {
+            document.getElementById("memoEditPopup").style.display = "none";
+        }
+
+
+        function openNewPopup() {
+            document.getElementById("newTitle").value = "";
+            document.getElementById("newMemo").value = "";
+            document.getElementById("memoNewPopup").style.display = "flex";
+        }
+
+        function closeNewPopup() {
+            document.getElementById("memoNewPopup").style.display = "none";
+        }
+
+
+        function insertMemo() {
+
+            const title = document.getElementById("newTitle").value.trim();
+            const memo  = document.getElementById("newMemo").value.trim();
+
+            if (!title) {
+                alert("제목은 필수 입력입니다.");
+                return;
+            }
+
+            fetch("/memo/insert", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ title, memo })
+            })
+                .then(res => res.text())
+                .then(result => {
+                    if (result === "success") {
+                        alert("📌 등록 완료!");
+                        closeNewPopup();
+                        location.reload();
+                    } else {
+                        alert("❌ 등록 실패!");
+                    }
+                })
+                .catch(err => {
+                    alert("❌ 서버 오류 발생: " + err);
+                });
         }
 
     </script>
@@ -278,6 +383,48 @@
             <div class="popup-buttons">
                 <button class="popup-btn edit-btn" id="popupEditBtn">수정</button>
                 <button class="popup-btn close-btn" onclick="closePopup()">닫기</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ======================= -->
+    <!-- ✏️ 수정용 팝업 레이어 -->
+    <!-- ======================= -->
+    <div class="memo-edit-popup-overlay" id="memoEditPopup">
+        <div class="memo-edit-popup">
+
+            <h3>메모 수정</h3>
+
+            <label>제목</label>
+            <input type="text" id="editTitle" class="edit-input">
+
+            <label>내용</label>
+            <textarea id="editMemo" class="edit-textarea"></textarea>
+
+            <div class="edit-buttons">
+                <button class="popup-btn save-btn" onclick="updateMemo()">저장</button>
+                <button class="popup-btn close-btn" onclick="closeEditPopup()">취소</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================= -->
+    <!-- 🆕 신규 등록 팝업 -->
+    <!-- ======================= -->
+    <div class="memo-new-popup-overlay" id="memoNewPopup">
+        <div class="memo-edit-popup">
+            <h3>새 메모 작성</h3>
+
+            <label>제목</label>
+            <input type="text" id="newTitle" class="edit-input" placeholder="제목을 입력하세요">
+
+            <label>내용</label>
+            <textarea id="newMemo" class="edit-textarea" placeholder="내용을 입력하세요"></textarea>
+
+            <div class="edit-buttons">
+                <button class="popup-btn save-btn" onclick="insertMemo()">등록</button>
+                <button class="popup-btn close-btn" onclick="closeNewPopup()">취소</button>
             </div>
         </div>
     </div>

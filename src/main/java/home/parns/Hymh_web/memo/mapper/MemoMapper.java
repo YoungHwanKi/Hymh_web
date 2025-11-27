@@ -22,4 +22,8 @@ public interface MemoMapper {
                                   @Param("endDate") String endDate);
 
     MemoVo getMemoDetail(long seq);
+
+    int updateMemo(MemoVo memoVo);
+
+    int insertMemo(MemoVo memoVo);
 }

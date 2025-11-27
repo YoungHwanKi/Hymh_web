@@ -11,4 +11,8 @@ public interface MemoService {
                                   String startDate, String endDate);
 
     MemoVo getMemoDetail(long seq);
+
+    int updateMemo(MemoVo memoVo);
+
+    int insertMemo(MemoVo memoVo);
 }
